@@ -1,0 +1,11 @@
+# Project settings #
+####################
+PublicHolidaysAPI/PublicHolidaysAPI/*
+PublicHolidaysAPI/manage.py
+
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
