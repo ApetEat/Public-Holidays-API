@@ -1,5 +1,7 @@
 import os.path import dirname, join
 
+from django.db import connection
+
 # Create your models here.
 
 
@@ -14,7 +16,7 @@ def load_sql_data(filename):
     with connection.cursor() as cursor:
         cursor.execute(sql_statement)
 
-country_data = lambda: load_sql_data('country.sql')
+# Data to provide to migrations
 community_data = lambda: load_sql_data('coummunity.sql')
 province_data = lambda: load_sql_data('province.sql')
 locality_data = lambda: load_sql_data('locality.sql')

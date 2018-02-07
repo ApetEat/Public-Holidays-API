@@ -5,39 +5,21 @@ from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 
 
-class Country(models.Model):
-    name = models.CharField(
-        _('Country'),
-        max_length=100,
+class Community(models.Model): ç
+    code = models.IntegerField(
+        _('Official code'),
+        max_length=2,
         blank=False,
         unique=True,
     )
-    created = models.DateTimeField(
-        _('Created'),
-        default=timezone.now,
-        editable=False,
-    )
-    updated = models.DateTimeField(
-        _('Updated'),
-        blank=True,
-        null=True,
-        editable=True,
-    )
-
-    class Meta:
-        verbose_name = _('Country')
-        verbose_name_plural = _('Countries')
-
-
-class AutonomousCommunity(models.Model):
     name = models.CharField(
         _('Autonomous Community'),
         max_length=100,
         blank=False,
     )
-    country = models.ForeignKey(
-        Country,
-        on_delete=models.CASCADE,
+    country = models.CharField(
+        _('Country'),
+        default='Spain',
     )
     created = models.DateTimeField(
         _('Created'),
@@ -57,13 +39,18 @@ class AutonomousCommunity(models.Model):
 
 
 class Province(models.Model):
+    code = models.IntegerField(
+        _('Official code'),
+        max_length=2,
+        blank=False,
+        unique=True,
+    )
     name = models.CharField(
         _('Province'),
         max_length=100,
-        blank=False,
-    )
+        blank=False,)
     community = models.ForeignKey(
-        AutonomousCommunity,
+        Community,
         on_delete=models.CASCADE,
     )
     created = models.DateTimeField(
@@ -80,6 +67,12 @@ class Province(models.Model):
 
 
 class Locality(models.Model):
+    code = models.IntegerField(
+        _('Official code'),
+        max_length=3,
+        blank=False,
+        unique=True,
+    )
     name = models.CharField(
         _('Locality'),
         max_length=200,
@@ -89,9 +82,10 @@ class Locality(models.Model):
         Province,
         on_delete=models.CASCADE,
     )
-    is_apeteat = models.BooleanField(
-        _('Is ApetEat service'),
-        default=False,
+    dc = models.IntegerField(
+        _('Control Digit'),
+        max_length=1,
+        blank=False,
     )
     created = models.DateTimeField(
         _('Created'),
@@ -116,19 +110,15 @@ class PublicHolidaysCalendar(models.Model):
         blank=True,
         null=True,
     )
-    country = models.ForeignKey(
-        Country,
-        on_delete=models.CASCADE,
-    )
     community = models.ForeignKey(
-        AutonomousCommunity,
+        Community,
         on_delete=models.CASCADE,
     )
     province = models.ForeignKey(
         Province,
         on_delete=models.CASCADE,
     )
-    localities = models.ForeignKey(
+    locality = models.ForeignKey(
         Locality,
         on_delete=models.CASCADE,
     )
