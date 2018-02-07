@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 
 
-class Community(models.Model): ç
+class Community(models.Model):
     code = models.IntegerField(
         _('Official code'),
         max_length=2,
