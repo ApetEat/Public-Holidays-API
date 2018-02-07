@@ -9,3 +9,4 @@ PublicHolidaysAPI/manage.py
 *.log
 *.sql
 *.sqlite
+*.sqlite3
