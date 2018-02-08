@@ -1,21 +1,16 @@
-from django.urls import path, re_path, register_converter
+from django.urls import re_path
 
-from . import converters, views
+from . import views
 
-# Create your urls here.
-
-
-register_converter(converters.DateConverter, 'yyyymmdd')
 
 urlpatterns = [
-    path(
-        '<yyyymmdd:date>/<int:locality>/<int:province>/<int:community>/<int:country>',
+    re_path(
+        r'^(?P<date>\d{4}-\d{1,2}-\d{1,2})/'
+        r'(?P<locality_id>\d+)/'
+        r'(?:(?P<province_id>\d+)/)?'
+        r'(?:(?P<community_id>\d+)/)?'
+        r'(?:(?P<country_id>\d+)/)?$',
         views.check_public_holiday,
         name='public-holiday',
-    ),
-    re_path(
-        r'(?P<date>\d{4}/\d{1,2}/\d{1,2})/(?P<locality>\d+)/(?:/(?P<province>\d+))?/(?:/(?P<community>\d+))?/(?:/(?P<country>\d+))?/',
-        views.check_public_holiday,
-        name='re-public-holiday',
     ),
 ]

@@ -5,16 +5,19 @@ from rest_framework.response import Response
 from .serializers import PublicHolidaySerializer
 from .models import PublicHolidayCalendar
 
-# Create your views here.
-
 
 @api_view(['GET'])
-def check_public_holiday(request, *args, **kwargs):
+def check_public_holiday(request, **kwargs):
     """
     Check if date is public holiday for given locality.
     """
+    params = {}
+    for key, value in kwargs.items():
+        if value is not None:
+            params[key] = value
+
     try:
-        public_holiday = PublicHolidayCalendar.objects.get(**kwargs)
+        public_holiday = PublicHolidayCalendar.objects.get(**params)
     except PublicHolidayCalendar.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

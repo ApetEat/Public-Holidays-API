@@ -143,7 +143,7 @@ class Locality(models.Model):
 
 
 class PublicHolidayCalendar(models.Model):
-    date = models.DateTimeField(
+    date = models.DateField(
         _('Date'),
         blank=False,
         null=False,
