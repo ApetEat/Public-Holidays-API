@@ -10,7 +10,7 @@ register_converter(converters.DateConverter, 'yyyymmdd')
 urlpatterns = [
     path(
         '<yyyymmdd:date>/<int:locality>/<int:province>/<int:community>/<int:country>',
-        views.check_is_public_holiday,
+        views.check_public_holiday,
         name='public-holiday',
     ),
     re_path(
