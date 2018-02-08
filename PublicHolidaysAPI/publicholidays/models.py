@@ -2,24 +2,23 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from .managers import PublicHolidayManager
+
 # Create your models here.
 
 
-class Community(models.Model):
-    code = models.IntegerField(
+class Country(models.Model):
+    code = models.CharField(
         _('Official code'),
         max_length=2,
         blank=False,
         unique=True,
     )
     name = models.CharField(
-        _('Autonomous Community'),
-        max_length=100,
-        blank=False,
-    )
-    country = models.CharField(
         _('Country'),
-        default='Spain',
+        max_length=50,
+        blank=False,
+        unique=True,
     )
     created = models.DateTimeField(
         _('Created'),
@@ -34,21 +33,57 @@ class Community(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Autonomous Community')
-        verbose_name_plural = _('Autonomous Communities')
+        verbose_name_plural = _('Countries')
+
+    def __str__(self):
+        return 'Country: {} - {}'.format(self.code, self.name)
+
+
+class Community(models.Model):
+    code = models.IntegerField(
+        _('Official code'),
+        blank=False,
+        unique=True,
+    )
+    name = models.CharField(
+        _('Community'),
+        max_length=100,
+        blank=False,
+    )
+    country = models.ForeignKey(
+        Country,
+        on_delete=models.CASCADE,
+    )
+    created = models.DateTimeField(
+        _('Created'),
+        default=timezone.now,
+        editable=False,
+    )
+    updated = models.DateTimeField(
+        _('Updated'),
+        blank=True,
+        null=True,
+        editable=True,
+    )
+
+    class Meta:
+        verbose_name_plural = _('Communities')
+
+    def __str__(self):
+        return 'Community: {} - {}'.format(self.code, self.name)
 
 
 class Province(models.Model):
     code = models.IntegerField(
         _('Official code'),
-        max_length=2,
         blank=False,
         unique=True,
     )
     name = models.CharField(
         _('Province'),
         max_length=100,
-        blank=False,)
+        blank=False,
+    )
     community = models.ForeignKey(
         Community,
         on_delete=models.CASCADE,
@@ -65,13 +100,15 @@ class Province(models.Model):
         editable=True,
     )
 
+    def __str__(self):
+        return 'Province: {} - {}'.format(self.code, self.name)
+
 
 class Locality(models.Model):
     code = models.IntegerField(
         _('Official code'),
-        max_length=3,
         blank=False,
-        unique=True,
+        unique=False,
     )
     name = models.CharField(
         _('Locality'),
@@ -84,8 +121,7 @@ class Locality(models.Model):
     )
     dc = models.IntegerField(
         _('Control Digit'),
-        max_length=1,
-        blank=False,
+        blank=True,
     )
     created = models.DateTimeField(
         _('Created'),
@@ -100,15 +136,21 @@ class Locality(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Locality')
         verbose_name_plural = _('Localities')
 
+    def __str__(self):
+        return 'Locality: {} - {}'.format(self.code, self.name)
 
-class PublicHolidaysCalendar(models.Model):
+
+class PublicHolidayCalendar(models.Model):
     date = models.DateTimeField(
         _('Date'),
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
+    )
+    country = models.ForeignKey(
+        Country,
+        on_delete=models.CASCADE,
     )
     community = models.ForeignKey(
         Community,
@@ -133,3 +175,13 @@ class PublicHolidaysCalendar(models.Model):
         null=True,
         editable=True,
     )
+
+    class Meta:
+        ordering = ['date']
+        verbose_name = _('Public Holiday Calendar')
+        verbose_name_plural = _('Public Holiday Calendars')
+
+    objects = PublicHolidayManager()
+
+    def __str__(self):
+        return 'Public holiday: {} - {}'.format(self.date, self.locality)
