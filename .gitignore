@@ -6,6 +6,7 @@ PublicHolidaysAPI/manage.py
 # Cache #
 #########
 PublicHolidaysAPI/publicholidays/__pycache__/*
+PublicHolidaysAPI/publicholidays/migrations/__pycache__/*
 PublicHolidaysAPI/publicholidays/sql/__pycache__/*
 
 # Logs and databases #
