@@ -17,8 +17,4 @@ def load_sql_data(filename):
         cursor.execute(sql_statement)
 
 # Data to provide to migrations
-country_data = lambda x, y: load_sql_data('country.sql')
-community_data = lambda x, y: load_sql_data('community.sql')
-province_data = lambda x, y: load_sql_data('province.sql')
-locality_data = lambda x, y: load_sql_data('locality.sql')
 public_holiday_data = lambda x, y: load_sql_data('publicholidaycalendar.sql')
