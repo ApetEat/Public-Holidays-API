@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from location.models import City, Province, Region, Country
+from location.models import City
 
 
 class PublicHoliday(models.Model):
