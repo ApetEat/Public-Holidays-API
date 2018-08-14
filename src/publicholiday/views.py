@@ -1,5 +1,5 @@
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import JSONRenderer
 
 from django.shortcuts import get_object_or_404
 
@@ -11,7 +11,7 @@ class PublicHolidayRetrieveAPIView(RetrieveAPIView):
     """
     Check if a day is a public holiday in a city
     """
-    renderer_classes = [TemplateHTMLRenderer]
+    renderer_classes = (JSONRenderer,)
     serializer_class = PublicHolidaySerializer
     permission_classes = ()
 
